@@ -5,8 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.chatter.Chatter.api.requestbody.Identify;
 
 import com.chatter.Chatter.api.models.Person;
 import com.chatter.Chatter.api.repository.UserRepository;
@@ -25,10 +27,10 @@ public class UserController {
 	public Person p;
 	
 	@PostMapping("/login")
-	public Boolean checkLogin(HttpServletRequest request) {
+	public Boolean checkLogin(@RequestBody Identify body) {
 		
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
+		String username=body.getUsername();
+		String password=body.getPassword();
 		
 	
 		p.setPassword(password);
@@ -43,10 +45,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/register")
-	public Boolean register(HttpServletRequest request) {
+	public Boolean register(@RequestBody Identify body) {
 		
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
+		String username=body.getUsername();
+		String password=body.getPassword();
 		
 		Optional<Person> found=ur.findById(username);
 		if(found == null) {
