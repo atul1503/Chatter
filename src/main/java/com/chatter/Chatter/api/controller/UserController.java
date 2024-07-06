@@ -6,6 +6,8 @@ import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,29 +36,11 @@ public class UserController {
 	public Person p;
 	
 	@Autowired
+	public PasswordEncoder pe;
+	
+	@Autowired
 	DoneResponse response;
 	
-	@PostMapping("/login")
-	public DoneResponse checkLogin(@RequestBody Identify body) {
-		
-		String username=body.getUsername();
-		String password=body.getPassword();
-		
-	
-		p.setPassword(password);
-		p.setUsername(username);
-		
-		Person found=ur.findByUsernameAndPassword(username, password);
-		
-		if(found != null ) {
-			response.setMessage("Login success.");
-			response.setStatus(200);
-			return response;
-		}
-		response.setMessage("Login failed. The username or password is not correct.");
-		response.setStatus(305);
-		return response;
-	}
 	
 	@PostMapping("/register")
 	public DoneResponse register(@RequestBody Identify body) {
@@ -67,7 +51,7 @@ public class UserController {
 		Optional<Person> found=ur.findById(username);
 		
 		if(!found.isPresent()) {
-			p.setPassword(password);
+			p.setPassword(pe.encode(password));
 			p.setUsername(username);
 			ur.save(p);
 			response.setMessage("User added.");
