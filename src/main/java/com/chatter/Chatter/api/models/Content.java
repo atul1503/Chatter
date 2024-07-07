@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -19,10 +20,7 @@ public class Content {
 	
 	@Id
 	private String photourl;
-	
-	@OneToOne()
-	private Message message;
-	
+
 	public Content() {}
 
 	private String type;

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class Message {
 	}
 
 
-	@OneToOne(mappedBy = "message")
+	@OneToOne()
 	private Content msgcontent;
 
 
