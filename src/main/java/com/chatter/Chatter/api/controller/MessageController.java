@@ -89,8 +89,10 @@ public class MessageController {
 		msg.setMsgcontent(content);
 		msg.setReceiver(ur.findByUsername(recid));
 		msg.setSender(ur.findByUsername(senderid));
+		logger.debug(msg.getReceiver().toString());
 		msg.setTime(new Date());
 		mr.save(msg);
+		
 		
 		DoneResponse dr=new DoneResponse();
 		dr.setMessage("Message saved in database.");

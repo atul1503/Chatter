@@ -42,7 +42,13 @@ public class SecurityConfig {
     	.csrf(csrf -> csrf.disable())
     	.addFilterAt(customdaofilter(configuauthmanager(service,getPasswordEncoder())), UsernamePasswordAuthenticationFilter.class)
     	.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            )
+    	.logout(logout -> logout  // Configure logout
+                .logoutUrl("/users/logout")  // Custom logout URL
+                 // Redirect URL after successful logout
+                .invalidateHttpSession(true)  // Invalidate the session
+                .deleteCookies("JSESSIONID")  // Delete session cookie
             );
 
     	return http.build();
