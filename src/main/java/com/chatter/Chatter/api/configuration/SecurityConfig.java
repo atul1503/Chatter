@@ -28,20 +28,21 @@ public class SecurityConfig {
 	@Autowired
 	private PersonService service;
 	
+	@Autowired
+	private AllowAllAuthorizationManager am;
+	
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	http
     	.authorizeHttpRequests(auth -> auth
     	    .requestMatchers("/users/register").permitAll()
     	    .requestMatchers("/users/login").permitAll()
-    	    .anyRequest().authenticated()
+    	    .anyRequest().access(am)
     	)
-    	.csrf(csrf -> csrf
-    	    .ignoringRequestMatchers("/users/register", "/users/login")
-    	)
+    	.csrf(csrf -> csrf.disable())
     	.addFilterAt(customdaofilter(configuauthmanager(service,getPasswordEncoder())), UsernamePasswordAuthenticationFilter.class)
     	.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
             );
 
     	return http.build();

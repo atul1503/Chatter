@@ -1,5 +1,6 @@
 package com.chatter.Chatter.api.models;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.Entity;
@@ -49,5 +50,12 @@ public class Content {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return "Message is "+text+" and url is"+photourl+" and type is "+type;
+	}
+	
+	
 		
 }
