@@ -97,7 +97,6 @@ public class MessageController {
 		dr.setStatus(200);
 		
 		msg=null;
-		dr=null;
 		return dr;
 				
 	}

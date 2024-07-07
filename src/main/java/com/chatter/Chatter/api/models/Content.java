@@ -3,6 +3,7 @@ package com.chatter.Chatter.api.models;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -16,9 +17,11 @@ public class Content {
 	
 	
 	@Id
+	@Column(name="text")
 	private String text;
 	
 	@Id
+	@Column(name = "photourl")
 	private String photourl;
 
 	public Content() {}
