@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.chatter.Chatter.api.models.Person;
 import com.chatter.Chatter.api.service.PersonService;
@@ -44,11 +46,11 @@ public class SecurityConfig {
     	.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             )
-    	.logout(logout -> logout  // Configure logout
-                .logoutUrl("/users/logout")  // Custom logout URL
-                 // Redirect URL after successful logout
-                .invalidateHttpSession(true)  // Invalidate the session
-                .deleteCookies("JSESSIONID")  // Delete session cookie
+    	.logout(logout -> logout
+                .logoutUrl("/users/logout")
+                .addLogoutHandler(new SecurityContextLogoutHandler())  // Invalidate session
+                .addLogoutHandler(new CookieClearingLogoutHandler("JSESSIONID"))
+                .logoutSuccessHandler(customlogouthandler())
             );
 
     	return http.build();
@@ -76,6 +78,9 @@ public class SecurityConfig {
     	return new CustomDaoFilter(authmanager);
     }
     
+    @Bean CustomLogoutSuccessHandler customlogouthandler() {
+    		return new CustomLogoutSuccessHandler();
+    }
     
     
 }
