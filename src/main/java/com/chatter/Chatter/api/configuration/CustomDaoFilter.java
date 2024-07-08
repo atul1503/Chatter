@@ -66,7 +66,6 @@ public class CustomDaoFilter extends UsernamePasswordAuthenticationFilter {
     	HttpSession session = request.getSession(true); 
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
         
-        logger.debug("Authentication successful: {}", authResult);
 
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("Authentication successful");

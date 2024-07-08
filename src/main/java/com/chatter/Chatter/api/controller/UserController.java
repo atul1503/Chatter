@@ -26,9 +26,6 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/users")
 public class UserController {
 	
-	private static final Logger logger=LoggerFactory.getLogger(UserController.class);
-	
-	
 	@Autowired
 	public UserRepository ur;
 	

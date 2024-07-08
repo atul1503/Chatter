@@ -53,7 +53,7 @@ public class Message {
 	}
 
 
-	@OneToOne()
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumns({
 		@JoinColumn(name="text",referencedColumnName = "text"),
 		@JoinColumn(name="photourl",referencedColumnName = "photourl")
