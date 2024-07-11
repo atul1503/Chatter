@@ -7,6 +7,9 @@ import com.chatter.Chatter.api.models.Person;
 
 import java.io.File;
 import java.io.IOException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,7 +19,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +40,7 @@ import com.chatter.Chatter.api.repository.UserRepository;
 import com.chatter.Chatter.api.requestbody.DoneResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @RestController
@@ -81,7 +91,7 @@ public class MessageController {
 	@PostMapping("/createSimple")
 	public DoneResponse createMessageSimple(HttpServletRequest request) {
 		String text=request.getParameter("text");
-		String recid=request.getParameter("receiverid");
+		String recid=request.getParameter("recid");
 		String senderid=request.getParameter("senderid");
 		
 		Content content=new Content();
@@ -123,7 +133,7 @@ public class MessageController {
 		
 		Message msg=new Message();
 		msg.setReceiver(ur.findByUsername(recid));
-		msg.setSender(ur.findByUsername(recid));
+		msg.setSender(ur.findByUsername(senderid));
 		msg.setTime(new Date());
 		mr.save(msg);
 		Long msgid=msg.getMessageId();
@@ -152,6 +162,25 @@ public class MessageController {
 		
 		
 		
+	}
+	
+	
+	@GetMapping("/image")
+	public ResponseEntity<InputStreamResource> GetImage(HttpServletRequest request) throws IOException {
+		Path pathtofile=Paths.get(uploadDir,request.getParameter("image_name"));
+		File file=pathtofile.toFile();
+		if(!file.exists()) {
+			throw new IOException(request.getParameter("image_name")+" doesnot exist.");
+		}
+		FileSystemResource imgfile=new FileSystemResource(pathtofile);
+		
+		HttpHeaders headers=new HttpHeaders();
+		
+		headers.set("Content-Disposition", "inline; filename: \""+imgfile.getFilename()+"\"");
+		return ResponseEntity
+				.ok()
+				.headers(headers)
+				.body(new InputStreamResource(imgfile.getInputStream()));
 	}
 	
 	
