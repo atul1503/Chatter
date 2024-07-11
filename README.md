@@ -33,19 +33,19 @@ This is an excellent project for both newbies and advanced developers on how to 
 
 ```
 
-# `GET /messages/latest`
+## `GET /messages/latest`
 
-## Description
+### Description
 Get the latest 5 messages from a sender to a receiver.
 
-## Request
+### Request
 
-### Query Parameters:
+#### Query Parameters:
 
 - `senderid` (string): ID of the sender.
 - `receiverid` (string): ID of the receiver.
 
-## Response
+### Response
 
 ```
 [
@@ -100,19 +100,19 @@ To register a new user.
 }
 ```
 
-# `POST /messages/createSimple`
+## `POST /messages/createSimple`
 
-## Description
+### Description
 To create a new text message.
 
-## Request
+### Request
 
-### Parameters:
+#### Parameters:
 - `senderid` (string): ID of the sender.
 - `receiverid` (string): ID of the receiver.
 - `text` (string): The message.
 
-## Response
+### Response
 
 ```json
 {
@@ -121,19 +121,19 @@ To create a new text message.
 }
 ```
 
-# `POST /messages/create`
+## `POST /messages/create`
 
-## Description
+### Description
 To create a new image message.
 
-## Request
+### Request
 
-### Body:
+#### Body:
 - `senderid` (string): ID of the sender.
 - `recid` (string): ID of the receiver.
 - `image` (file): The image to upload.
 
-## Response
+### Response
 
 ```json
 {
@@ -142,17 +142,17 @@ To create a new image message.
 }
 ```
 
-# `GET /messages/image`
+## `GET /messages/image`
 
-## Description
+### Description
 To retrieve an image by its name.
 
-## Request
+### Request
 
-### Query Parameters:
+#### Query Parameters:
 - `image_name` (string): The image name along with the extension.
 
-## Response
+### Response
 
-### 200 OK:
+#### 200 OK:
 Binary data of the image.
