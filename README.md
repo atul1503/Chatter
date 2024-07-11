@@ -23,7 +23,7 @@ API Documentation:
     Response:
         {"message": "Logout successful"}
 
-- GET /messages/latest?senderid=tadasha&receiverid=atul
+- GET /messages/latest
 
     Description: get the latest 5 messages from a sender to receiver.
 
