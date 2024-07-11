@@ -63,3 +63,50 @@ API Documentation:
             }
        ]`
   
+ - POST /users/register
+       Description: to register any user.
+
+       Request:
+           Body:
+               username: (string) chosen userid.
+               password: (string) chosen password.
+       Response:
+           `{
+                "status": 305,
+                "message": "User already present."
+            }`
+
+- POST /messages/createSimple
+          Description: to create a new message of text.
+          Request:
+              Params:
+                  senderid: (string) id of the sender.
+                  receiverid: (string) id of the reciever.
+                  text: (string) the message.
+          Response:
+              `{
+                    "status": 200,
+                    "message": "Message saved in database."
+               }`
+
+- POST /messages/create
+          Description: to create a new message as image.
+          Request:
+              Body:
+                  senderid
+                  recid
+                  image: (file) the image to upload
+          Response:
+                `{
+                    "status": 200,
+                    "message": "Message saved."
+                }`
+
+- GET /messages/image
+          Description: to get the iamge as file by image name.
+          Request:
+              image_name: (string) the image name along with the extension.
+          Response:
+              (Binary data of image).
+   
+           
