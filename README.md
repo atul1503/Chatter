@@ -2,13 +2,13 @@
 
 This is an excellent project for both newbies and advanced developers on how to write a proper Spring Boot backend for a chat application.
 
-## API Documentation
+# API Documentation
 
-### GET /users/login
+## GET /users/login
 
 **Description:** To login to the application.
 
-#### Request
+### Request
 
 - **Path Parameters:**
   - `id` (string): The ID of the resource.
@@ -16,15 +16,15 @@ This is an excellent project for both newbies and advanced developers on how to 
   - `username` (string): The registered username.
   - `password` (string): The registered password.
 
-#### Response
+### Response
 
 - **200 OK:** Authentication successful
 
-### GET /users/logout
+## GET /users/logout
 
 **Description:** To logout from the application.
 
-#### Response
+### Response
 
 ```json
 {
