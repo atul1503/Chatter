@@ -1,6 +1,7 @@
 # Chat Application Backend
 
 This is an excellent project for both newbies and advanced developers on how to write a proper Spring Boot backend for a chat application.
+This app also uses a customized version of Dao authentication.
 
 # API Documentation
 
