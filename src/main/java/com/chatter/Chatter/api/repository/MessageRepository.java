@@ -22,4 +22,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	public Page<Message> getOldMessages(@Param("senderid") String senderid,@Param("receiverid") String receiverid,@Param("lastDate") Date lastDate,Pageable pa);
 	
 	
+	@Query("SELECT m from Message m WHERE m.sender.username= :username OR m.receiver.username= :username ORDER BY m.time DESC")
+	public List<Message> getLatestMessageFromAllFriends(@Param("username") String username);
 }

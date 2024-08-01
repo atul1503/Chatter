@@ -100,7 +100,7 @@ public class MessageController {
 		content.setText(text);
 		content.setType("text");
 		
-		cr.save(content);
+		//cr.save(content);
 		
 		Message msg=new Message();
 		
@@ -117,6 +117,7 @@ public class MessageController {
 		dr.setStatus(200);
 		
 		msg=null;
+		content=null;
 		return dr;
 				
 	}
@@ -183,5 +184,12 @@ public class MessageController {
 				.body(new InputStreamResource(imgfile.getInputStream()));
 	}
 	
+	@GetMapping("/getlatestfromfriends")
+	public List<Message> getlatest(HttpServletRequest request) {
+		
+		
+		return mr.getLatestMessageFromAllFriends(request.getParameter("username"));
+		
+	}
 	
 }
