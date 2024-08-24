@@ -14,8 +14,8 @@ import com.chatter.Chatter.api.models.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-	@Query("SELECT m FROM Message m WHERE m.sender.username= :senderid AND m.receiver.username= :receiverid ORDER BY m.time DESC ")
-	public Page<Message> getTopFiveMessages(@Param("senderid") String senderid,@Param("receiverid") String receiverid,Pageable pa);
+	@Query(value="SELECT receiver_username,sender_username,time,message_id,text,photourl FROM Message WHERE (sender_username= :userone AND receiver_username= :usertwo) OR (sender_username= :usertwo AND receiver_username= :userone) ORDER BY time DESC ",nativeQuery = true)
+	public Page<Message> getTopFiveMessages(@Param("userone") String userone,@Param("usertwo") String usertwo,Pageable pa);
 	
 	
 	@Query("SELECT m FROM Message m WHERE m.sender= :senderid AND m.receiver= :receiverid AND m.time< :lastDate   ORDER BY m.time DESC ")

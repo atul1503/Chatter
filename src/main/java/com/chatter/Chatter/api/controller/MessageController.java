@@ -64,11 +64,9 @@ public class MessageController {
 
 	
 	@GetMapping("/latest")
-	public List<Message> getLast5Messages(@RequestParam("senderid") String senderid,
-			@RequestParam("receiverid") String receiverid){
-		return mr.getTopFiveMessages(senderid,receiverid,PageRequest.of(0,5)).getContent();
-		
-		
+	public List<Message> getLast5Messages(@RequestParam("userone") String userone,
+			@RequestParam("usertwo") String usertwo){
+		return mr.getTopFiveMessages(userone,usertwo,PageRequest.of(0,5)).getContent();
 	}
 	
 	
