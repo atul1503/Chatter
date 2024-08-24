@@ -22,8 +22,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	public Page<Message> getOldMessages(@Param("senderid") String senderid,@Param("receiverid") String receiverid,@Param("lastDate") Date lastDate,Pageable pa);
 	
 	
-	@Query(value = "SELECT * FROM message WHERE message_id IN (SELECT DISTINCT ON (GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username)) message_id FROM message WHERE sender_username = :username OR receiver_username = :username ORDER BY GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username), time DESC)", nativeQuery = true)
-	public List<Message> getLatestMessageFromAllFriends(@Param("username") String username);
+	@Query(value = "SELECT * FROM message WHERE message_id IN (SELECT DISTINCT ON (GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username)) message_id FROM message WHERE (sender_username = :username OR receiver_username = :username) AND (time < :afterDate AND time > :beforeDate) ORDER BY GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username), time DESC)", nativeQuery = true)
+	public List<Message> getLatestMessageFromAllFriends(@Param("username") String username, @Param("afterDate") Date afterDate, @Param("beforeDate") Date beforeDate);
 
 
 

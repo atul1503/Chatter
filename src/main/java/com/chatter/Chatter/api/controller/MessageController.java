@@ -12,9 +12,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.usertype.internal.OffsetDateTimeCompositeUserType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -185,8 +187,28 @@ public class MessageController {
 	@GetMapping("/getlatestfromfriends")
 	public List<Message> getlatest(HttpServletRequest request) {
 		
+		String beforeDateString=request.getParameter("beforeDate");
+		String afterDateString=request.getParameter("afterDate");
+		Date afterDate;
+		Date beforeDate;
 		
-		return mr.getLatestMessageFromAllFriends(request.getParameter("username"));
+		if(beforeDateString == null) {
+			beforeDate = new Date(0);
+		}
+		else {
+		  beforeDate= Date.from(OffsetDateTime.parse(beforeDateString).toInstant());
+		}
+		
+		if(afterDateString == null) {
+			afterDate=new Date();
+		}
+		else {
+			afterDate=Date.from(OffsetDateTime.parse(afterDateString).toInstant());
+			
+		}
+		
+		
+		return mr.getLatestMessageFromAllFriends(request.getParameter("username"),afterDate,beforeDate);
 		
 	}
 	
