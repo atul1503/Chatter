@@ -196,6 +196,7 @@ public class MessageController {
 			beforeDate = new Date(0);
 		}
 		else {
+		  beforeDateString=beforeDateString.replace(" ", "+");
 		  beforeDate= Date.from(OffsetDateTime.parse(beforeDateString).toInstant());
 		}
 		
@@ -203,12 +204,12 @@ public class MessageController {
 			afterDate=new Date();
 		}
 		else {
+			afterDateString=afterDateString.replace(" ", "+");
 			afterDate=Date.from(OffsetDateTime.parse(afterDateString).toInstant());
 			
 		}
 		
-		
-		return mr.getLatestMessageFromAllFriends(request.getParameter("username"),afterDate,beforeDate);
+		return mr.getLatestMessageFromAllFriends(request.getParameter("username"),afterDate,beforeDate,PageRequest.of(0, 5)).getContent();
 		
 	}
 	
