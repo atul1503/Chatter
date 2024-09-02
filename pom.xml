@@ -80,7 +80,7 @@
                     <configuration>
                         <archive>
                             <manifest>
-                                <mainClass>com.kub.App</mainClass>
+                                <mainClass>com.chatter.Chatter.api.ApiApplication</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
