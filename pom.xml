@@ -77,8 +77,12 @@
 			<plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.1.1</version>
             <configuration>
+		  <archive>
+                    <manifest>
+                        <mainClass>com.chatter.Chatter.api.ApiApplication</mainClass> <!-- Replace with your main class -->
+                    </manifest>
+                </archive>
                 <descriptorRefs>
                     <descriptorRef>jar-with-dependencies</descriptorRef>
                 </descriptorRefs>
