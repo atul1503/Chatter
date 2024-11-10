@@ -34,9 +34,7 @@ public class SecurityConfig {
 	
 	@Autowired
 	private PersonService service;
-	
-	@Autowired
-	private AllowAllAuthorizationManager am;
+
 	
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,22 +42,12 @@ public class SecurityConfig {
     	.authorizeHttpRequests(auth -> auth
     	    .requestMatchers("/users/register").permitAll()
     	    .requestMatchers("/users/login").permitAll()
-    	    .anyRequest().access(am)
+    	    .anyRequest().authenticated()
     	)
     	.csrf(csrf -> csrf.disable())
-    	.addFilterAt(customdaofilter(configuauthmanager(service,getPasswordEncoder())), UsernamePasswordAuthenticationFilter.class)
-    	.addFilterAt(customCorsFilter(), CorsFilter.class)
-    	.sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            )
-    	.logout(logout -> logout
-                .logoutUrl("/users/logout")
-                .addLogoutHandler(new SecurityContextLogoutHandler())  // Invalidate session
-                .addLogoutHandler(new CookieClearingLogoutHandler("JSESSIONID"))
-                .logoutSuccessHandler(customlogouthandler())
-            );
-
-    	return http.build();
+    	.addFilterAt(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+    	.addFilterAt(customCorsFilter(), CorsFilter.class);
+      	return http.build();
     }
     
     
@@ -68,7 +56,7 @@ public class SecurityConfig {
     	
     		CorsConfiguration config=new CorsConfiguration();
     		config.setAllowCredentials(true);
-    		config.addAllowedOriginPattern("http://localhost:*");
+    		config.addAllowedOriginPattern("*");
     		config.addAllowedHeader("*");
     		config.addAllowedMethod("*");
     		
@@ -78,30 +66,14 @@ public class SecurityConfig {
  
     }
     
-    @Bean 
-    public AuthenticationManager configuauthmanager(PersonService ps,PasswordEncoder pe) {
-    	
-    DaoAuthenticationProvider ap=new DaoAuthenticationProvider();
-    ap.setUserDetailsService(service);
-    ap.setPasswordEncoder(getPasswordEncoder());
-    
-    return new ProviderManager(ap);
-    	
+    @Bean
+    public JwtFilter jwtFilter() {
+    	return new JwtFilter();
     }
     
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder getEncoder() {
+    	return new BCryptPasswordEncoder();
     }
-    
-    @Bean
-    public CustomDaoFilter customdaofilter(AuthenticationManager authmanager) {
-    	return new CustomDaoFilter(authmanager);
-    }
-    
-    @Bean CustomLogoutSuccessHandler customlogouthandler() {
-    		return new CustomLogoutSuccessHandler();
-    }
-    
-    
+     
 }

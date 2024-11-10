@@ -1,6 +1,7 @@
 package com.chatter.Chatter.api.controller;
 
 
+import com.chatter.Chatter.api.configuration.UserController;
 import com.chatter.Chatter.api.models.Content;
 import com.chatter.Chatter.api.models.Message;
 import com.chatter.Chatter.api.models.Person;
@@ -66,9 +67,35 @@ public class MessageController {
 
 	
 	@GetMapping("/latest")
-	public List<Message> getLast5Messages(@RequestParam("userone") String userone,
-			@RequestParam("usertwo") String usertwo){
-		return mr.getTopFiveMessages(userone,usertwo,PageRequest.of(0,5)).getContent();
+	public List<Message> getLast5Messages(HttpServletRequest request){
+		
+		String userone=request.getParameter("userone");
+		String usertwo=request.getParameter("usertwo");
+		String beforeDateString=request.getParameter("beforeDate");
+		String afterDateString=request.getParameter("afterDate");
+		
+		
+		Date afterDate;
+		Date beforeDate;
+		
+		if(beforeDateString == null) {
+			beforeDate = new Date(0);
+		}
+		else {
+		  beforeDateString=beforeDateString.replace(" ", "+");
+		  beforeDate= Date.from(OffsetDateTime.parse(beforeDateString).toInstant());
+		}
+		
+		if(afterDateString == null) {
+			afterDate=new Date();
+		}
+		else {
+			afterDateString=afterDateString.replace(" ", "+");
+			afterDate=Date.from(OffsetDateTime.parse(afterDateString).toInstant());
+			
+		}
+		
+		return mr.getTopFiveMessages(userone,usertwo,afterDate,beforeDate,PageRequest.of(0,5)).getContent();
 	}
 	
 	
@@ -112,9 +139,7 @@ public class MessageController {
 		mr.save(msg);
 		
 		
-		DoneResponse dr=new DoneResponse();
-		dr.setMessage("Message saved in database.");
-		dr.setStatus(200);
+		DoneResponse dr=new DoneResponse("","Message saved in database.");
 		
 		msg=null;
 		content=null;
@@ -150,9 +175,7 @@ public class MessageController {
 		
 		msg.setMsgcontent(content);
 		mr.save(msg);
-		DoneResponse response=new DoneResponse();
-		response.setMessage("Message saved.");
-		response.setStatus(200);
+		DoneResponse response=new DoneResponse("","Message saved");
 		
 		
 		

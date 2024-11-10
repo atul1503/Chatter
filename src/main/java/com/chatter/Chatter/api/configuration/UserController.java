@@ -1,4 +1,4 @@
-package com.chatter.Chatter.api.controller;
+package com.chatter.Chatter.api.configuration;
 
 import java.util.Optional;
 
@@ -31,38 +31,54 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserController {
 	
 	@Autowired
-	public UserRepository ur;
+	private UserRepository ur;
+	
 	
 	@Autowired
-	public Person p;
+	private PasswordEncoder pe;
 	
+
 	@Autowired
-	public PasswordEncoder pe;
-	
-	@Autowired
-	DoneResponse response;
+	private JwtService service;
 	
 	
 	@PostMapping("/register")
 	public ResponseEntity<DoneResponse> register(@RequestBody Identify body) {
 		
-		String username=body.getUsername();
-		String password=body.getPassword();
-		
-		Optional<Person> found=ur.findById(username);
-		
-		if(!found.isPresent()) {
-			p.setPassword(pe.encode(password));
-			p.setUsername(username);
-			ur.save(p);
-			response.setMessage("User added.");
-			response.setStatus(200);
-			return new ResponseEntity(response,HttpStatus.OK);
-			
+		Person newUser=new Person();
+		newUser.setUsername(body.getUsername());
+		newUser.setPassword(pe.encode(body.getPassword()));
+		try {
+			ur.save(newUser);
 		}
-		response.setMessage("User already present.");
-		response.setStatus(304);
-		return new ResponseEntity<DoneResponse>(response,HttpStatus.NOT_MODIFIED);
+		catch (Exception e) {
+			return ResponseEntity.ok(new DoneResponse("","User already exists."));
+		}
+		
+		String token=service.generateToken(newUser);
+		
+		DoneResponse responseBody=new DoneResponse(token,"User is registered. Please find the jwt token.");
+		
+		
+		return ResponseEntity.ok(responseBody);
+		
+		
+	}
+	
+	
+	@PostMapping("/login")
+	public ResponseEntity<DoneResponse> login(@RequestBody Identify body){
+		
+		Person user=ur.getReferenceById(body.getUsername());
+		if(!pe.matches(body.getPassword(), user.getPassword())) {
+			return ResponseEntity.status(300).body(new DoneResponse("","User details are incorrect")); 
+		}
+		
+		String token=service.generateToken(user);
+		
+		
+		return ResponseEntity.ok(new DoneResponse(token, "login success. Token is generated."));
+		
 		
 	}
 

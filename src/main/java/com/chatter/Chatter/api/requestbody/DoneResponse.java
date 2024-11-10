@@ -2,16 +2,25 @@ package com.chatter.Chatter.api.requestbody;
 
 import org.springframework.stereotype.Component;
 
-@Component
+
 public class DoneResponse {
 	
-	private int status=5;
-	private String message="";
-	public int getStatus() {
-		return status;
+	
+	
+	public DoneResponse(String token, String message) {
+		super();
+		this.token = token;
+		this.message = message;
 	}
-	public void setStatus(int status) {
-		this.status = status;
+	private String token;
+	private String message="";
+	
+	
+	public String getToken() {
+		return this.token;
+	}
+	public void setToken(String token) {
+		this.token=token;
 	}
 	public String getMessage() {
 		return message;
