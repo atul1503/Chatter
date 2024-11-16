@@ -24,7 +24,7 @@ public class JwtService {
 	private PersonService service;
 	
 	private String key="om namah shivaya , om namah shivaya , om namh shivaya";
-	private int expirationTime=86400;
+	private int expirationTime=86400000;
 
 	String generateToken(UserDetails user) {
 		

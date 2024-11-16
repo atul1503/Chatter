@@ -78,8 +78,19 @@ public class MessageController {
 		Date afterDate;
 		Date beforeDate;
 		
+		
 		if(beforeDateString == null) {
 			beforeDate = new Date(0);
+			
+			if(afterDateString==null) {
+				afterDate=new Date();	
+			}
+			else {
+				afterDateString=afterDateString.replace(" ", "+");
+				afterDate=Date.from(OffsetDateTime.parse(afterDateString).toInstant());
+			
+			}
+			return mr.getOldMessages(userone,usertwo,afterDate,beforeDate,PageRequest.of(0,5)).getContent();
 		}
 		else {
 		  beforeDateString=beforeDateString.replace(" ", "+");
@@ -88,6 +99,8 @@ public class MessageController {
 		
 		if(afterDateString == null) {
 			afterDate=new Date();
+			return mr.getNewMessages(userone,usertwo,afterDate,beforeDate,PageRequest.of(0,5)).getContent();
+			
 		}
 		else {
 			afterDateString=afterDateString.replace(" ", "+");
@@ -95,24 +108,9 @@ public class MessageController {
 			
 		}
 		
-		return mr.getTopFiveMessages(userone,usertwo,afterDate,beforeDate,PageRequest.of(0,5)).getContent();
+		return mr.getNewMessages(userone,usertwo,afterDate,beforeDate,PageRequest.of(0,5)).getContent();
 	}
 	
-	
-	@GetMapping("/past")
-	public List<Message> getPastMessages(@RequestParam("senderid") String senderid,
-			@RequestParam("receiverid") String receiverid, @RequestParam("lastDate") String datestring){
-		Date lastDate;
-		try{
-			SimpleDateFormat formatter=new SimpleDateFormat();
-			lastDate=formatter.parse(datestring);
-			formatter=null;
-		}
-		catch(ParseException e) {
-			lastDate=null;
-		}
-		return mr.getOldMessages(senderid,receiverid,lastDate,PageRequest.of(0, 5)).getContent();
-	}
 	
 	
 	@PostMapping("/createSimple")

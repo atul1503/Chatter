@@ -14,30 +14,17 @@ import com.chatter.Chatter.api.models.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
+	@Query(value="SELECT receiver_username,sender_username,time,message_id,text,photourl FROM Message WHERE ((sender_username= :userone AND receiver_username= :usertwo) OR (sender_username= :usertwo AND receiver_username= :userone)) AND (time >= :beforeDate AND time <= :afterDate) ORDER BY time ASC ",nativeQuery = true)
+	public Page<Message> getNewMessages(@Param("userone") String userone,@Param("usertwo") String usertwo,@Param("afterDate") Date afterDate,@Param("beforeDate") Date beforeDate, Pageable pa);
+	
+	
 	@Query(value="SELECT receiver_username,sender_username,time,message_id,text,photourl FROM Message WHERE ((sender_username= :userone AND receiver_username= :usertwo) OR (sender_username= :usertwo AND receiver_username= :userone)) AND (time >= :beforeDate AND time <= :afterDate) ORDER BY time DESC ",nativeQuery = true)
-	public Page<Message> getTopFiveMessages(@Param("userone") String userone,@Param("usertwo") String usertwo,@Param("afterDate") Date afterDate,@Param("beforeDate") Date beforeDate, Pageable pa);
-	
-	
-	@Query("SELECT m FROM Message m WHERE m.sender= :senderid AND m.receiver= :receiverid AND m.time< :lastDate   ORDER BY m.time DESC ")
-	public Page<Message> getOldMessages(@Param("senderid") String senderid,@Param("receiverid") String receiverid,@Param("lastDate") Date lastDate,Pageable pa);
+	public Page<Message> getOldMessages(@Param("userone") String userone,@Param("usertwo") String usertwo,@Param("afterDate") Date afterDate,@Param("beforeDate") Date beforeDate, Pageable pa);
 	
 	
 	@Query(value = "SELECT * FROM message WHERE message_id IN (SELECT DISTINCT ON (GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username)) message_id FROM message WHERE (sender_username = :username OR receiver_username = :username) AND (time <= :afterDate AND time >= :beforeDate) ORDER BY GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username),time DESC) ORDER BY time DESC", 
 			countQuery = "SELECT COUNT(*) FROM (SELECT DISTINCT ON (GREATEST(sender_username, receiver_username), LEAST(sender_username, receiver_username)) message_id FROM message WHERE (sender_username = :username OR receiver_username = :username) AND (time < :afterDate AND time > :beforeDate)) AS count_query",	nativeQuery = true)
 	public Page<Message> getLatestMessageFromAllFriends(@Param("username") String username, @Param("afterDate") Date afterDate, @Param("beforeDate") Date beforeDate,Pageable pa);
 
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	
+		
 }
